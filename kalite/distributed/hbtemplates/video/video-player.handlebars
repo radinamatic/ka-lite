@@ -1,10 +1,12 @@
 <div id="video-player"{{#unless content_urls }} class="client-online-only"{{/unless}}>
-    <video class="video-js vjs-default-skin" id="{{ random_id }}" controls preload="auto" width="100%" height="600" {{#if content_urls.thumbnail }}poster="{{ content_urls.thumbnail }}" {{/if}}data-setup="{}">
-        <source src="{{ content_urls.stream }}" type="{{ content_urls.stream_type }}" />
-        {{#each subtitle_urls }}
-        <track kind="captions" src="{{ url }}" srclang="{{ code }}" label="{{ name }}" {{#ifcond code "==" ../selected_language }}{{#ifcond ../code "!=" "en" }}default="True"{{/ifcond}}{{/ifcond}}/>
-        {{/each}}
-    </video>
+    <figure>
+        <video class="video-ac" id="{{ random_id }}" controls="controls" preload="metadata"  aria-describedby="full-descript" width="100%" height="600" {{#if content_urls.thumbnail }}poster="{{ content_urls.thumbnail }}" {{/if}}>
+            <source src="{{ content_urls.stream }}" type="{{ content_urls.stream_type }}" />
+            {{#each subtitle_urls }}
+            <track kind="subtitles" src="{{ url }}" srclang="{{ code }}" label="{{ name }}" {{#ifcond code "==" ../selected_language }}{{#ifcond ../code "!=" "en" }}default="True"{{/ifcond}}{{/ifcond}}/>
+            {{/each}}
+        </video>
+    </figure>
     {{#if content_urls.thumbnail}}<img class="video-thumb" src="{{ content_urls.thumbnail }}" style="position: absolute; left: -9999999px;">{{/if}}
 </div>
 

@@ -57,19 +57,7 @@
     <script src="{% static 'js/store/models.js' %}"></script>
 
     <!-- video-related files -->
-    <!--[if IE]>
-    <script src="{% static "video-js-4/video.js" %}"></script>
-    <script>
-        _V_.options.flash.swf = "{% static "video-js-4/video-js.swf" %}?" + Math.random();
-    </script>
-    <![endif]-->
-    <!--[if !IE]> -->
-    <script src="{% static "video-js/video.js" %}"></script>
-    <script src="{% static "video-js/video-speed.js" %}"></script>
-    <script>
-        _V_.options.flash.swf = "{% static "video-js/video-js.swf" %}";
-    </script>
-    <!-- <![endif]-->
+	<script src="{% static "acorn/acornmediaplayer/jquery.acornmediaplayer.js" %}"></script>
 
     <script src="{% url 'handlebars_templates' module_name='video' %}"></script>
     <script src="{% static "js/distributed/videoplayer.js" %}"></script>

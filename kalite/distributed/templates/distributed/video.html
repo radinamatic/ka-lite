@@ -26,16 +26,10 @@
         }
 
     </style>
-    <!--[if IE]>
-    <link href="{% static "video-js-4/video-js.mod.css" %}" rel="stylesheet" type="text/css">
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link href="{% static "video-js-4/video-js-old-ie.css" %}" rel="stylesheet" type="text/css">
-    <![endif]-->
-    <!--[if !IE]> -->
-    <link href="{% static "video-js/video-js.css" %}" rel="stylesheet" type="text/css">
-    <link href="{% static "video-js/video-speed.css" %}" rel="stylesheet" type="text/css">
-    <!-- <![endif]-->
+     <!-- Acorn Media Player CSS -->
+    <link href="{% static "acorn/acornmediaplayer/acornmediaplayer.base.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "acorn/acornmediaplayer/themes/access/acorn.access.css" %}" rel="stylesheet" type="text/css">
+
 {% endblock headcss %}
 
 {% block headjs %}
@@ -43,7 +37,7 @@
     {{ block.super }}
 
     <script src="{% url 'handlebars_templates' module_name='video' %}"></script>
-
+    <!-- Where is this js/distributed/videoplayer.js file actually?-->
     <script src="{% static "js/distributed/videoplayer.js" %}"></script>
 
     <script>
@@ -57,19 +51,22 @@
     });
     </script>
 
-    <!--[if IE]>
-    <script src="{% static "video-js-4/video.js" %}"></script>
-    <script>
-        _V_.options.flash.swf = "{% static "video-js-4/video-js.swf" %}?" + Math.random();
-    </script>
-    <![endif]-->
-    <!--[if !IE]> -->
-    <script src="{% static "video-js/video.min.js" %}"></script>
-    <script src="{% static "video-js/video-speed.js" %}"></script>
-    <script>
-        _V_.options.flash.swf = "{% static "video-js/video-js.swf" %}";
-    </script>
-    <!-- <![endif]-->
+	<script src="{% static "acorn/lib/jquery-ui-1.10.0.custom.min.js" %}"></script>
+	<script src="{% static "acorn/lib/modernizr.custom.js" %}"></script>
+	<script src="{% static "acorn/lib/polyfiller.js" %}"></script>
+	<script>
+		if(window.webshims) {
+			webshims.polyfill('mediaelement');
+		}
+	</script>
+
+	<script src="{% static "acorn/acornmediaplayer/jquery.acornmediaplayer.js" %}"></script>
+
+	<script>
+		jQuery(function() {
+			jQuery('video, audio').acornMediaPlayer();
+		});
+	</script>
 
 {% endblock headjs %}
 

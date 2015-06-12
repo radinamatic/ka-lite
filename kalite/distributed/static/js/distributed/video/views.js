@@ -47,13 +47,13 @@ window.VideoPlayerView = ContentBaseView.extend({
         }
         this._loaded = true;
 
-        var player_id = this.$(".video-js").attr("id");
+        var player_id = this.$(".video-ac").attr("id");
 
         if (player_id) {
             this.player = this.player = _V_(player_id);
             this.initialize_listeners();
         } else {
-            console.warn("Warning: Could not find Video.JS player!");
+            console.warn("Warning: Could not find Acorn Media Player!");
         }
 
         this.data_model.set({width: width, height: height});
