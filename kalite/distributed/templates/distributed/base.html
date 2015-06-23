@@ -185,6 +185,9 @@
             <div class="navbar kalite-navbar header-footer-bg" role="banner">
               <div class="container">
                   <div class="row">
+
+                      <a class="sr-only" href="{% url 'homepage' %}" title="{{ channel_data.channel_name }} {% trans 'Home' %}">
+
                       <div class="navbar-header">
                           {# collapse entire menu #}
                           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-hidden="true" id="navbar_toggle">
