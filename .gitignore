@@ -100,3 +100,4 @@ ghostdriver.log
 *.swp
 /data/khan/assessmentitems.json.version
 file_map.json
+.gitignore

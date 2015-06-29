@@ -176,29 +176,92 @@
         <script type="text/javascript" src="{% static 'js/inline/models.js' %}"></script>
         <script type="text/javascript" src="{% static 'js/inline/views.js' %}"></script>
         {% endif %}
+
+        <!-- Where should this function go so it gets executed onload (after everything else?)  -->
+        <script type="text/javascript">
+            function showSkipLinks() {
+            var skipBgColor= "fff";
+            var skipTextColor = "000";
+            // Amend/tweak these to your satisfaction
+            var textIndent = "20px";
+            var skipNavHeight = "auto";
+            var skipFontSize = "medium";
+            var viewportwidth="100%";
+            var sk_a = document.getElementsByTagName("a");
+            for (i=0; i<sk_a.length; i++)
+             {
+                bodyEl = document.getElementsByTagName("body")[0];
+                if (sk_a[i].className=="skip-link")
+                    {
+                    sk_a[i].onfocus=function(e){
+                        this.style.width=viewportwidth;
+                        this.style.padding="10px 0";
+                        this.style.fontSize = skipFontSize;
+                        this.style.height = skipNavHeight;
+                        this.style.textIndent = textIndent;
+                        this.style.backgroundColor = skipBgColor;
+                        this.style.color = skipTextColor;
+                        }
+                    sk_a[i].onblur=function(e){
+                        this.style.width="0";
+                        this.style.padding="0";
+                        this.style.fontSize="0px";
+                        this.style.height="0";
+                        this.style.textIndent="-30000px";
+                        this.style.backgroundColor="transparent";
+                        this.style.backgroundImage="none";
+                        }
+                    }
+                }
+            }
+            function init()
+            {
+            showSkipLinks();
+            }
+            window.onload=init;
+            </script>
+
+            <!-- TODO: Better styling (like the one on webaim.com)  -->
+            <style type="text/css">
+            #skipLinkList li {
+            list-style:none;
+            }
+            a.skip-link {
+            position:absolute;
+            top:0px;
+            left:0px;
+            z-index:1000 !important;
+            font-size:0px;
+            color:000 !important;
+            display:block;
+            margin:0;
+            text-indent:-30000px;
+            outline:none;
+            text-align:left;
+            filter:alpha(opacity=100);
+            opacity:1;
+            }
+            </style>
+
     </head>
 
     <body class="{% block bodyclass %}{% endblock %}">
+
+        <div id="skipLinkList">
+            <ul>
+                <!-- TODO: Implement the first two links for logged-in users ONLY  -->
+                <li><a href="{%url 'homepage' %}#resume" class="skip-link">{% trans "Skip to where you left off" %}</a></li>
+                <li><a href="{%url 'homepage' %}#user-name" class="skip-link">{% trans "Skip to user options" %}</a></li>
+                <li><a href="{%url 'learn' %}" class="skip-link">{% trans "Jump to topics menu" %}</a></li>
+            </ul>
+        </div>
         <div id="wrapper">
 
             {# Header / Navbar #}
+
             <div class="navbar kalite-navbar header-footer-bg" role="banner">
               <div class="container">
                   <div class="row">
-
-                          <a href="{%url 'learn' %}" id="skipto">{% trans "Jump to topics menu" %}</a>
-                          <!-- For some reason these two options for logged-in users do not work ever since I've put them inside skipto div -->
-                          {% if is_logged_in %}
-                              <a href="{%url 'homepage' %}#resume" class="sr-only">{% trans "Jump to where you left off" %}</a>
-                              <a href="{%url 'homepage' %}#user-name" class="sr-only">{% trans "Skip to user options" %}</a>
-                          {% endif %}
-
-
-                        <script type="text/JavaScript">
-                            $(function() { //equivalent to document.ready
-                              $(".sidebar-entry").focus();
-                            });
-                        </script>
 
                       <div class="navbar-header">
                           {# collapse entire menu #}
