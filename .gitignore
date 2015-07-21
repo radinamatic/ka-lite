@@ -81,6 +81,7 @@ writeup/
 /data/i18n
 /data/subtitles
 /data/screenshots
+/exercises/
 /kalite/*.jpg
 /kalite/*.mp4.part
 /kalite/i18n/data/dubbed_video_mappings.json
