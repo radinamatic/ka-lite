@@ -101,6 +101,7 @@ writeup/
 /kalite/ghostdriver.log
 /TAGS
 .tags
+.idea
 /kalite/i18n/static/
 /.vagrant/
 ghostdriver.log
