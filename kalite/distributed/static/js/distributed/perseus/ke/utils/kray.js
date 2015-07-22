@@ -1,28 +1,3 @@
-/*
- * Ray Utils
- * A ray is an array of an endpoint and another point along the ray.
- * For example, [[0, 0], [1, 0]] is the ray starting at the origin and
- * traveling along the positive x-axis.
- */
-define(function(require) {
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 
-var kvector = require("./kvector.js");
-var kpoint = require("./kpoint.js");
-
-var kray = KhanUtil.kray = {
-
-    equal: function(ray1, ray2, tolerance) {
-        // Compare the directions of the rays
-        var v1 = kvector.subtract(ray1[1],ray1[0]);
-        var v2 = kvector.subtract(ray2[1],ray2[0]);
-
-        var sameOrigin = kpoint.equal(ray1[0], ray2[0]);
-        var codirectional = kvector.codirectional(v1, v2, tolerance);
-
-        return sameOrigin && codirectional;
-    }
-};
-
-return kray;
-
-});
+},{}]},{},[1]);
