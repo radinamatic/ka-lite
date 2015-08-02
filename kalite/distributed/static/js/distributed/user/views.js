@@ -22,13 +22,15 @@ var SuperUserCreateModalView = BaseView.extend({
     template: SuperUserCreateModalTemplate,
 
     initialize: function() {
+        _.bindAll(this, "close_modal", "show_modal", "add_superuser_form");
         this.render();
         $("body").append(this.el);
     },
 
     render: function() {
         this.$el.html(this.template());
-        _.defer(this.add_superuser_form);
+        var self = this;
+        _.defer(self.add_superuser_form);
     },
 
     add_superuser_form: function() {
@@ -45,8 +47,7 @@ var SuperUserCreateModalView = BaseView.extend({
                 }
             },
             error : function(e){
-                $('#superusercreate-container').html("<div class='alert alert-danger'>Cannot correctly load the admin creation form. " 
-                    + e.status + " (" + e.statusText + ")</div>");
+                $('#superusercreate-container').html("<div class='alert alert-danger'>Cannot correctly load the admin creation form. " + e.status + " (" + e.statusText + ")</div>");
                 console.log(e);
             }
         });
@@ -485,7 +486,7 @@ var UserView = BaseView.extend({
 
 /* This view toggles which navbar items are displayed to each type of user */ 
 var ToggleNavbarTemplate = require("./hbtemplates/navigation.handlebars");
-module.exports = ToggleNavbarView = BaseView.extend ({
+ToggleNavbarView = BaseView.extend ({
 
     template: ToggleNavbarTemplate,
 
@@ -536,3 +537,7 @@ module.exports = ToggleNavbarView = BaseView.extend ({
 
 });
 
+module.exports = {
+    "ToggleNavbarView": ToggleNavbarView,
+    "SuperUserCreateModalView": SuperUserCreateModalView
+};
