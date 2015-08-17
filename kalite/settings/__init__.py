@@ -63,6 +63,7 @@ if package_selected("RPi"):
     ENABLE_CLOCK_SET = getattr(local_settings, "ENABLE_CLOCK_SET", True)
 
     DO_NOT_RELOAD_CONTENT_CACHE_AT_STARTUP = True
+    USING_RASPBERRY_PI = True
 
 
 if package_selected("nalanda"):
@@ -74,9 +75,6 @@ if package_selected("nalanda"):
 
 if package_selected("UserRestricted"):
     LOG.info("UserRestricted package selected.")
-
-    if CACHE_TIME != 0 and not hasattr(local_settings, KEY_PREFIX):
-        KEY_PREFIX += "|restricted"  # this option changes templates
     DISABLE_SELF_ADMIN = True  # hard-code facility app setting.
 
 

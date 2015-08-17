@@ -2,6 +2,9 @@
 # File created by Coverage
 .coverage
 
+# PyCharm
+.idea
+
 # Eclipse
 .project
 .pydevproject
@@ -20,6 +23,12 @@ MANIFEST.in
 dist-packages-temp/
 dist-packages-downloads/
 dist-packages/
+
+# User cache data generated at runtime
+cache/
+
+# Updates downloaded at runtime
+static-updates
 
 # MAC stuff
 .DS_Store

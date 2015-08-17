@@ -14,6 +14,7 @@ from kalite.testing.mixins.facility_mixins import FacilityMixins
 from kalite.testing.mixins.student_progress_mixins import StudentProgressMixin
 
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -106,6 +107,56 @@ class FacilityControlTests(FacilityMixins,
 
         with self.assertRaises(NoSuchElementException):
             self.browser.find_element_by_xpath('//a[@class="facility-delete-link"]')
+
+    def test_facility_with_no_missing_metadata(self):
+        facility_name = 'no-missing-metadata'
+        self.fac = self.create_facility(name=facility_name)
+        for field in ['user_count', 'latitude', 'longitude', 'contact_phone']:
+            setattr(self.fac, field, 100)
+        for field in ['address', 'contact_name', 'contact_email']:
+            setattr(self.fac, field, 'Not Empty')
+        teacher_username, teacher_password = 'teacher1', 'password'
+        self.teacher = self.create_teacher(username=teacher_username,
+                                           password=teacher_password)
+        self.browser_login_teacher(username=teacher_username,
+                                   password=teacher_password,
+                                   facility_name=facility_name)
+        self.browse_to(self.reverse('zone_redirect'))  # zone_redirect so it will bring us to the right zone
+
+        with self.assertRaises(NoSuchElementException):
+            self.browser.find_element_by_xpath('//*[@id="facilities-table"]/table/tbody/tr[@class="warning"]')
+
+    def test_facility_with_missing_metadata(self):
+        facility_name = 'missing-metadata'
+        self.fac = self.create_facility(name=facility_name)
+        teacher_username, teacher_password = 'teacher1', 'password'
+        self.teacher = self.create_teacher(username=teacher_username,
+                                           password=teacher_password)
+        self.browser_login_teacher(username=teacher_username,
+                                   password=teacher_password,
+                                   facility_name=facility_name)
+        self.browse_to(self.reverse('zone_redirect'))  # zone_redirect so it will bring us to the right zone
+        #should raise NoSuchElementException if there is (incorrectly) no facility no with the warning class
+        self.browser.find_element_by_xpath('//*[@id="facilities-table"]/table/tbody/tr[@class="warning"]')
+
+        
+    def test_facility_with_empty_string_metadata(self):
+        facility_name = 'empy-string-metadata'
+        self.fac = self.create_facility(name=facility_name)
+        for field in ['user_count', 'latitude', 'longitude', 'contact_phone']:
+            setattr(self.fac, field, 100)
+        for field in ['address', 'contact_name']:
+            setattr(self.fac, field, 'Not Empty')
+        self.fac.contact_email = ''
+        teacher_username, teacher_password = 'teacher1', 'password'
+        self.teacher = self.create_teacher(username=teacher_username,
+                                           password=teacher_password)
+        self.browser_login_teacher(username=teacher_username,
+                                   password=teacher_password,
+                                   facility_name=facility_name)
+        self.browse_to(self.reverse('zone_redirect'))  # zone_redirect so it will bring us to the right zone
+        #should raise NoSuchElementException if there is (incorrectly) no facility no with the warning class
+        self.browser.find_element_by_xpath('//*[@id="facilities-table"]/table/tbody/tr[@class="warning"]')
 
 
 class GroupControlTests(FacilityMixins,
@@ -509,10 +560,8 @@ class CSVExportBrowserTests(CSVExportTestSetup, BrowserActionMixins, CreateAdmin
         self.browser_login_admin(**self.admin_data)
         self.browse_to(self.distributed_data_export_url)
 
-        self.browser_wait_for_ajax_calls_to_finish()
-
         # Check that group is disabled until facility is selected
-        group_select = self.browser.find_element_by_id("group-name")
+        group_select = WebDriverWait(self.browser, 30).until(EC.presence_of_element_located((By.ID, "group-name")))
         self.assertFalse(group_select.is_enabled(), "UI error")
 
         # Select facility, wait, and ensure group is enabled
@@ -525,10 +574,8 @@ class CSVExportBrowserTests(CSVExportTestSetup, BrowserActionMixins, CreateAdmin
                 option.click() # select() in earlier versions of webdriver
                 break
 
-        self.browser_wait_for_ajax_calls_to_finish()
-
         # Check that group is enabled now
-        group_select = self.browser.find_element_by_id("group-name")
+        group_select = WebDriverWait(self.browser, 30).until(EC.presence_of_element_located((By.ID, "group-name")))
         self.assertTrue(group_select.is_enabled(), "UI error")
 
         # Click and make sure something happens
@@ -545,10 +592,7 @@ class CSVExportBrowserTests(CSVExportTestSetup, BrowserActionMixins, CreateAdmin
                                    facility_name=self.teacher.facility.name)
         self.browse_to(self.distributed_data_export_url)
 
-        # Why is this here? Is the intention to wait for the page to load?
-        #self.browser_wait_for_ajax_calls_to_finish()
-
-        facility_select = self.browser.find_element_by_id("facility-name")
+        facility_select = WebDriverWait(self.browser, 30).until(EC.presence_of_element_located((By.ID, "facility-name")))
         self.assertFalse(facility_select.is_enabled(), "UI error")
 
         for option in facility_select.find_elements_by_tag_name('option'):
@@ -556,10 +600,8 @@ class CSVExportBrowserTests(CSVExportTestSetup, BrowserActionMixins, CreateAdmin
                 self.assertTrue(option.is_selected(), "Invalid Facility Selected")
                 break
 
-        # self.browser_wait_for_ajax_calls_to_finish()
-
         # Check that group is enabled now
-        group_select = self.browser.find_element_by_id("group-name")
+        group_select = WebDriverWait(self.browser, 30).until(EC.presence_of_element_located((By.ID, "group-name")))
         self.assertTrue(group_select.is_enabled(), "UI error")
 
         # Click and make sure something happens

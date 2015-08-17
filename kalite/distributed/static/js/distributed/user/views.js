@@ -8,6 +8,7 @@ var Handlebars = require("../base/handlebars");
 var AutoCompleteView = require("../search/views");
 var api = require("../utils/api");
 var get_params = require("../utils/get_params");
+var sprintf = require("sprintf-js").sprintf;
 
 
 var SuperUserCreateModalTemplate = require("./hbtemplates/superusercreatemodal.handlebars");
@@ -22,13 +23,15 @@ var SuperUserCreateModalView = BaseView.extend({
     template: SuperUserCreateModalTemplate,
 
     initialize: function() {
+        _.bindAll(this, "close_modal", "show_modal", "add_superuser_form");
         this.render();
         $("body").append(this.el);
     },
 
     render: function() {
         this.$el.html(this.template());
-        _.defer(this.add_superuser_form);
+        var self = this;
+        _.defer(self.add_superuser_form);
     },
 
     add_superuser_form: function() {
@@ -45,8 +48,7 @@ var SuperUserCreateModalView = BaseView.extend({
                 }
             },
             error : function(e){
-                $('#superusercreate-container').html("<div class='alert alert-danger'>Cannot correctly load the admin creation form. " 
-                    + e.status + " (" + e.statusText + ")</div>");
+                $('#superusercreate-container').html("<div class='alert alert-danger'>Cannot correctly load the admin creation form. " + e.status + " (" + e.statusText + ")</div>");
                 console.log(e);
             }
         });
@@ -188,7 +190,7 @@ var LoginView = BaseView.extend({
     template: LoginTemplate,
 
     initialize: function(options) {
-        _.bindAll(this, "handle_login")
+        _.bindAll(this, "handle_login");
         this.next = options.next;
         this.facility = (this.model.get("facilities")[0] || {id:""}).id;
         this.admin = false;
@@ -240,8 +242,7 @@ var LoginView = BaseView.extend({
             this.$("#id_" + error_data.error_highlight + "-container").addClass("has-error");
             this.$("#id_" + error_data.error_highlight).popover({
                 content: message,
-                placement: "auto bottom",
-                template: sprintf('<div id="id_%(popover_id)s-popover" class="popover alert alert-danger" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>',{popover_id: error_data.error_highlight})
+                placement: "auto bottom"
             });
             this.$("#id_" + error_data.error_highlight).popover("show");
             if (error_data.error_highlight == "password") {
@@ -387,7 +388,7 @@ var TotalPointView = Backbone.View.extend({
 var UsernameView = Backbone.View.extend({
 
     initialize: function() {
-        _.bindAll(this, "render")
+        _.bindAll(this, "render");
         this.listenTo(this.model, "change:username", this.render);
         this.render();
     },
@@ -485,7 +486,7 @@ var UserView = BaseView.extend({
 
 /* This view toggles which navbar items are displayed to each type of user */ 
 var ToggleNavbarTemplate = require("./hbtemplates/navigation.handlebars");
-module.exports = ToggleNavbarView = BaseView.extend ({
+ToggleNavbarView = BaseView.extend ({
 
     template: ToggleNavbarTemplate,
 
@@ -536,3 +537,7 @@ module.exports = ToggleNavbarView = BaseView.extend ({
 
 });
 
+module.exports = {
+    "ToggleNavbarView": ToggleNavbarView,
+    "SuperUserCreateModalView": SuperUserCreateModalView
+};
